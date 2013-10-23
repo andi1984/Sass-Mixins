@@ -1,0 +1,38 @@
+@mixin heading($lvl: 1, $max_font_size: 16px, $color: black, $uppercase: false, $shadow: false, $vary_colors: false) {
+  // Check $lvl logical borders
+  @if($lvl < 1){
+	$lvl: 1;
+  }
+
+  @if($lvl > 6) {
+	$lvl: 6;
+  }
+
+  // Avoid that the minimal font-size set is below half of the max font-size
+  $min_font_size: 0.5 * $max_font_size;
+
+  // Compute font-size (hyperbolic size distribution over $lvl)
+  $font-size: 1/$lvl * ($max_font_size - $min_font_size) + $min_font_size;
+
+  // Compute color, if colors are allowed to vary
+  @if($vary_colors) {
+		$color: tint($color, 8% * ($lvl - 1));
+  }
+
+  // Set CSS3 properties
+  font-size: $font-size;
+  line-height: 1.5 * $font-size;
+  margin-top: 1/2 * $font-size;
+  margin-bottom: 1/2 * $font-size;
+  color:$color;
+
+  // Set text-shadow, if flag is true
+  @if($shadow) {
+	text-shadow: 1px 1px 3px shade($color, 33%);
+  }
+
+  // Transform text to be uppercase, if flag is true
+  @if($uppercase) {
+	text-transform: uppercase;
+  }
+}
